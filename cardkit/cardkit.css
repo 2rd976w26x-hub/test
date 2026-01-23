@@ -1,0 +1,11 @@
+
+.playingcard{
+  width:56px;height:78px;
+  border-radius:12px;
+  border:1px solid #333;
+  background:#fff;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:22px;
+}

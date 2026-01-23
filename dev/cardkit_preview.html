@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<title>CardKit Preview</title>
+<link rel="stylesheet" href="../cardkit/cardkit.css">
+</head>
+<body>
+<h1>CardKit preview</h1>
+<div id="hand"></div>
+<script type="module">
+import {initCardKit,createCard} from "../cardkit/cardkit.js";
+initCardKit();
+const hand=document.getElementById("hand");
+[{suit:"♠",rank:"A"},{suit:"♣",rank:"A"}].forEach(c=>hand.appendChild(createCard(c)));
+</script>
+</body>
+</html>
