@@ -34,10 +34,10 @@
   line-height:1;
   user-select:none;
 }
-.playingcard .corner.tl{ left:6px; top:6px; }
-.playingcard .corner.br{ right:6px; bottom:6px; transform: rotate(180deg); }
-.playingcard .corner .rk{ font-size:13px; }
-.playingcard .corner .st{ font-size:15px; margin-top:0px; }
+.playingcard .corner.tl{ left:5px; top:5px; }
+.playingcard .corner.br{ right:5px; bottom:5px; transform: rotate(180deg); }
+.playingcard .corner .rk{ font-size:12px; }
+.playingcard .corner .st{ font-size:14px; margin-top:0px; }
 
 .cardface-svg{
   position:absolute;
