@@ -2,56 +2,54 @@
 <html lang="da">
 <head>
   <meta charset="UTF-8">
-  <title>CardKit – Preview (Piratwhist v0.2.98 kort)</title>
+  <title>CardKit – Face cards preview</title>
   <link rel="stylesheet" href="../cardkit/cardkit.css">
   <style>
-    body{
-      background:#0b1220;
-      color:#fff;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
-      padding:24px;
-    }
-    h1{ margin-bottom: 6px; }
-    h2{ margin: 22px 0 8px; font-size: 18px; font-weight: 600; opacity:.9; }
-    .row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-    .hand .playingcard{ margin-left:-36px; }
-    .hand .playingcard:first-child{ margin-left:0; }
-    .note{ opacity:.75; font-size:14px; margin-top:6px; }
+    body{background:#0b1220;color:#fff;font-family:system-ui;padding:24px}
+    h1{margin:0 0 8px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:10px 0 20px}
+    .hand .playingcard{margin-left:-44px}
+    .hand .playingcard:first-child{margin-left:0}
+    .note{opacity:.75;margin-bottom:18px}
   </style>
 </head>
 <body>
+  <h1>Face cards (K, D, J) med jeres billeder</h1>
+  <div class="note">K & J = manden. D = damen. (Gælder for alle kulører i denne demo.)</div>
 
-<h1>CardKit – kort (fra Piratwhist v0.2.98)</h1>
-<div class="note">Nu bør kortene have ramme/skygge og SVG pips.</div>
+  <h2>K</h2>
+  <div class="row" id="k"></div>
 
-<h2>1) Normal visning</h2>
-<div class="row" id="normal"></div>
+  <h2>D</h2>
+  <div class="row" id="d"></div>
 
-<h2>2) Overlappende hånd</h2>
-<div class="row hand" id="hand"></div>
+  <h2>J</h2>
+  <div class="row" id="j"></div>
 
-<h2>3) Face-down reference</h2>
-<div class="row" id="back"></div>
+  <h2>Overlappende hånd (K D J)</h2>
+  <div class="row hand" id="hand"></div>
 
 <script type="module">
   import { initCardKit, createCard } from "../cardkit/cardkit.js";
   initCardKit({ backUrl: "../assets/card_back.png" });
 
-  const cards = [
-    { suit:"S", rank:"A" }, { suit:"C", rank:"A" }, { suit:"H", rank:"A" }, { suit:"D", rank:"A" },
-    { suit:"S", rank:"10"}, { suit:"C", rank:"10"}, { suit:"H", rank:"10"}, { suit:"D", rank:"10"},
-    { suit:"S", rank:"K" }, { suit:"C", rank:"K" }, { suit:"H", rank:"K" }, { suit:"D", rank:"K" }
-  ];
+  const suits = ["S","H","D","C"];
 
-  const normal = document.getElementById("normal");
-  cards.forEach(c => normal.appendChild(createCard(c, { faceUp:true })));
+  const rows = {
+    k: document.getElementById("k"),
+    d: document.getElementById("d"),
+    j: document.getElementById("j"),
+  };
+
+  suits.forEach(s => rows.k.appendChild(createCard({suit:s, rank:"K"})));
+  suits.forEach(s => rows.d.appendChild(createCard({suit:s, rank:"D"})));
+  suits.forEach(s => rows.j.appendChild(createCard({suit:s, rank:"J"})));
 
   const hand = document.getElementById("hand");
-  cards.forEach(c => hand.appendChild(createCard(c, { faceUp:true })));
-
-  const back = document.getElementById("back");
-  back.appendChild(createCard({suit:"S",rank:"A"}, { faceUp:false }));
+  ["K","D","J","K","D","J"].forEach((r,idx)=>{
+    const s = suits[idx % suits.length];
+    hand.appendChild(createCard({suit:s, rank:r}));
+  });
 </script>
-
 </body>
 </html>

@@ -1,17 +1,28 @@
-/* CardKit CSS (from Piratwhist v0.2.98 online.css) */
-:root{ --cardback-url: none; }
+:root{
+  --card-w: 72px;
+  --card-h: 104px;
+  --card-radius: 12px;
+  --cardback-url: none;
+
+  --card-bg: rgba(255,255,255,.97);
+  --card-text: #111;
+  --card-red: #b00020;
+  --card-border: rgba(0,0,0,.22);
+  --card-shadow: 0 6px 16px rgba(0,0,0,.25);
+}
 
 .playingcard{
-  width:56px; height:78px;
-  border-radius:12px;
-  border:1px solid rgba(0,0,0,.25);
-  background: rgba(255,255,255,.97);
-  color:#111;
-  position:relative;
-  overflow:hidden;
-  box-shadow: 0 6px 16px rgba(0,0,0,.25);
+  width: var(--card-w);
+  height: var(--card-h);
+  border-radius: var(--card-radius);
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--card-text);
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
 }
-.playingcard.red{ color:#b00020; }
+.playingcard.red{ color: var(--card-red); }
 
 .playingcard .corner{
   position:absolute;
@@ -21,14 +32,12 @@
   gap:0px;
   font-weight:900;
   line-height:1;
-  letter-spacing:-.2px;
   user-select:none;
 }
 .playingcard .corner.tl{ left:6px; top:6px; }
 .playingcard .corner.br{ right:6px; bottom:6px; transform: rotate(180deg); }
-
 .playingcard .corner .rk{ font-size:14px; }
-.playingcard .corner .st{ font-size:14px; margin-top:0px; }
+.playingcard .corner .st{ font-size:16px; margin-top:0px; }
 
 .cardface-svg{
   position:absolute;
@@ -41,63 +50,12 @@
   font-weight: 900;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
-.cardface-svg .face-bg{
-  fill: rgba(0,0,0,.04);
-  stroke: rgba(0,0,0,.18);
-  stroke-width: 1.2;
-}
-.cardface-svg .face-line{
-  fill: rgba(0,0,0,.03);
-  stroke: currentColor;
-  stroke-width: 2;
-}
-.cardface-svg .face-fill{
-  fill: rgba(0,0,0,.06);
-  stroke: rgba(0,0,0,.18);
-  stroke-width: 1;
-}
-.cardface-svg .face-banner{
-  fill: rgba(255,255,255,.65);
-  stroke: rgba(0,0,0,.18);
-  stroke-width: 1;
-}
-.cardface-svg .face-rank{
-  fill: currentColor;
-  font-weight: 900;
-  font-size: 14px;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
-}
 
-.cardbtn{
-  padding:0;
-  border:none;
-  background:transparent;
-}
-.cardbtn:disabled{opacity:.35;}
-.cardbtn:disabled .playingcard{filter: grayscale(.4);}
-.slot .playingcard{transform: scale(.95); transform-origin: left top;}
-
-/* --- v0.2.98: winner sweep + play animation helpers (2s) --- */
-.flycard{
-  position: fixed;
-  z-index: 9999;
-  pointer-events: none;
-  will-change: transform, opacity;
-  filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
-}
-.flycard .playingcard{
-  width:72px;
-  height:102px;
-}
-
-
-/* --- v0.2.98: fixed card back (2 persons + 4 butterflies) --- */
 .playingcard.back{
   background-image: var(--cardback-url);
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  border: 1px solid rgba(0,0,0,.25);
 }
 .playingcard.back .corner,
 .playingcard.back .cardface-svg{ display:none !important; }
