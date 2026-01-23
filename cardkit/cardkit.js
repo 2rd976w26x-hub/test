@@ -2,7 +2,7 @@
  * CardKit (ported from Piratwhist v0.2.98)
  * Uses the exact card face SVG renderer from that build.
  */
-export const CARDKIT_VERSION = "1.0.1";
+export const CARDKIT_VERSION = "1.0.2";
 
 export function initCardKit(opts = {}){
   const root = document.documentElement;
