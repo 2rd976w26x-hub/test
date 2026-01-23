@@ -1,19 +1,39 @@
-
 <!DOCTYPE html>
 <html lang="da">
 <head>
-<meta charset="UTF-8">
-<title>CardKit Preview</title>
-<link rel="stylesheet" href="../cardkit/cardkit.css">
+  <meta charset="UTF-8">
+  <title>CardKit – Preview</title>
+  <link rel="stylesheet" href="../cardkit/cardkit.css">
+  <style>
+    body{background:#0b1220;color:#fff;font-family:system-ui;padding:24px}
+    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+    .hand .playingcard{margin-left:-36px}
+    .hand .playingcard:first-child{margin-left:6px}
+  </style>
 </head>
 <body>
-<h1>CardKit preview</h1>
-<div id="hand"></div>
-<script type="module">
-import {initCardKit,createCard} from "../cardkit/cardkit.js";
-initCardKit();
-const hand=document.getElementById("hand");
-[{suit:"♠",rank:"A"},{suit:"♣",rank:"A"}].forEach(c=>hand.appendChild(createCard(c)));
-</script>
+  <h1>CardKit – Preview</h1>
+
+  <h2>Normal</h2>
+  <div class="row" id="normal"></div>
+
+  <h2>Overlappende hånd</h2>
+  <div class="row hand" id="hand"></div>
+
+  <script type="module">
+    import { initCardKit, createCard } from "../cardkit/cardkit.js";
+    initCardKit({ backUrl: "../assets/card_back.png" });
+
+    const cards = [
+      {suit:"♠",rank:"A"},{suit:"♣",rank:"A"},{suit:"♥",rank:"A"},{suit:"♦",rank:"A"},
+      {suit:"♠",rank:"10"},{suit:"♣",rank:"10"},{suit:"♥",rank:"10"},{suit:"♦",rank:"10"},
+    ];
+
+    const normal=document.getElementById("normal");
+    cards.forEach(c=>normal.appendChild(createCard(c)));
+
+    const hand=document.getElementById("hand");
+    cards.forEach(c=>hand.appendChild(createCard(c)));
+  </script>
 </body>
 </html>

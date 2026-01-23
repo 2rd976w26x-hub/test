@@ -1,11 +1,18 @@
-
+:root{
+  --card-w:56px; --card-h:78px; --card-radius:12px;
+  --cardback-url:none;
+  --card-bg:#fff; --card-text:#111; --card-red:#b00020;
+  --card-border: rgba(0,0,0,.25);
+}
 .playingcard{
-  width:56px;height:78px;
-  border-radius:12px;
-  border:1px solid #333;
-  background:#fff;
+  width:var(--card-w); height:var(--card-h);
+  border-radius:var(--card-radius);
+  border:1px solid var(--card-border);
+  background:var(--card-bg);
+  color:var(--card-text);
   display:inline-flex;
   align-items:center;
   justify-content:center;
   font-size:22px;
+  margin:6px;
 }
