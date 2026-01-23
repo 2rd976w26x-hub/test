@@ -47,7 +47,10 @@
 }
 .cardface-svg .pip{
   fill: currentColor;
-  font-weight: 900;
+  stroke: rgba(255,255,255,.6);
+  stroke-width: 0.55px;
+  paint-order: stroke fill;
+  font-weight: 700;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
 }
 
@@ -59,3 +62,7 @@
 }
 .playingcard.back .corner,
 .playingcard.back .cardface-svg{ display:none !important; }
+
+.playingcard.red .cardface-svg .pip{
+  stroke: rgba(0,0,0,.22);
+}

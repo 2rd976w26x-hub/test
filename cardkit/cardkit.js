@@ -64,15 +64,16 @@ export function buildCardSVG(card){
   const suit = card.suit;
   const rank = card.rank;
 
-  function pip(x, y, size, rotate){
+  function pip(x, y, size, rotate, emphasis=false){
     const t = document.createElementNS(NS, "text");
     t.setAttribute("x", String(x));
     t.setAttribute("y", String(y));
     t.setAttribute("text-anchor", "middle");
     t.setAttribute("dominant-baseline", "middle");
-    t.setAttribute("font-size", String(size));
+    t.setAttribute("font-size", String(emphasis ? (size + 2) : size));
     t.setAttribute("class", "pip");
     t.textContent = suit;
+    t.setAttribute("opacity", emphasis ? "1" : "0.92");
     if (rotate) t.setAttribute("transform", `rotate(${rotate} ${x} ${y})`);
     svg.appendChild(t);
   }
@@ -106,20 +107,24 @@ export function buildCardSVG(card){
   const n = parseInt(rank, 10);
   const layouts = {
     2:  [[50, 44],[50, 104]],
-    3:  [[50, 38],[50, 74],[50, 110]],
+    3:  [[50, 38],[50, 74, true],[50, 110]],
     4:  [[34, 44],[66, 44],[34, 104],[66, 104]],
-    5:  [[34, 44],[66, 44],[50, 74],[34, 104],[66, 104]],
+    5:  [[34, 44],[66, 44],[50, 74, true],[34, 104],[66, 104]],
     6:  [[34, 40],[66, 40],[34, 74],[66, 74],[34, 108],[66, 108]],
-    7:  [[34, 38],[66, 38],[34, 68],[66, 68],[50, 74],[34, 108],[66, 108]],
+    7:  [[34, 38],[66, 38],[34, 68],[66, 68],[50, 74, true],[34, 108],[66, 108]],
     8:  [[34, 36],[66, 36],[34, 62],[66, 62],[34, 86],[66, 86],[34, 112],[66, 112]],
-    9:  [[34, 34],[66, 34],[34, 58],[66, 58],[50, 74],[34, 92],[66, 92],[34, 116],[66, 116]],
+    9:  [[34, 34],[66, 34],[34, 58],[66, 58],[50, 74, true],[34, 92],[66, 92],[34, 116],[66, 116]],
     10: [[30, 34],[70, 34],[34, 56],[66, 56],[30, 78],[70, 78],[34, 100],[66, 100],[30, 122],[70, 122]],
   };
   const pts = layouts[n] || [[50,74]];
-  for (const [x,y] of pts){
+  for (const item of pts){
+    const x = item[0], y = item[1], emphasis = !!item[2];
     const rot = (y > 74) ? 180 : 0;
-    const size = (n >= 8) ? 20 : 22;
-    pip(x, y, size, rot);
+
+    // Clean sizing: more pips => smaller, to avoid "clumps"
+    const size = (n >= 9) ? 18 : (n >= 8 ? 19 : (n >= 7 ? 20 : 22));
+
+    pip(x, y, size, rot, emphasis);
   }
   return svg;
 }
