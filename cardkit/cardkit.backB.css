@@ -67,8 +67,16 @@
   stroke: rgba(0,0,0,.22);
 }
 
-/* --- Back Variant A: simple zoom --- */
-.playingcard.back.backA{
-  background-size: 118%;
-  background-position: center 52%;
+/* --- Back Variant B: framed + slightly more zoom --- */
+.playingcard.back.backB{
+  background-size: 122%;
+  background-position: center 50%;
+}
+.playingcard.back.backB::after{
+  content:"";
+  position:absolute;
+  inset:6px;
+  border-radius:10px;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.08);
+  pointer-events:none;
 }

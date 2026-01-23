@@ -23,9 +23,10 @@ function normalizeCard(card){
 
 function isRedSuit(suit){ return suit === "♥" || suit === "♦"; }
 
-export function renderCardBack(){
+export function renderCardBack(opts = {}){
   const wrap = document.createElement("div");
-  wrap.className = "playingcard back";
+  const variant = opts.variant || "A"; // "A" or "B"
+  wrap.className = "playingcard back " + (variant === "B" ? "backB" : "backA");
   return wrap;
 }
 
@@ -52,7 +53,7 @@ export function renderCardFace(cardInput){
 
 export function createCard(card, opts = {}){
   const faceUp = opts.faceUp !== false;
-  return faceUp ? renderCardFace(card) : renderCardBack();
+  return faceUp ? renderCardFace(card) : renderCardBack({ variant: opts.backVariant || 'A' });
 }
 
 export function buildCardSVG(card){

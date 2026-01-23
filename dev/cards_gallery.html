@@ -72,9 +72,19 @@
   backCell.appendChild(createCard({suit:"S",rank:"A"}, {faceUp:false}));
   const bl = document.createElement("div");
   bl.className = "label";
-  bl.textContent = "Bagside";
+  bl.textContent = "Bagside (A)";
   backCell.appendChild(bl);
   backrow.appendChild(backCell);
+  // Back variant B
+  const backCellB = document.createElement("div");
+  backCellB.className = "cell";
+  backCellB.appendChild(createCard({suit:"S",rank:"A"}, {faceUp:false, backVariant:"B"}));
+  const blb = document.createElement("div");
+  blb.className = "label";
+  blb.textContent = "Bagside (B)";
+  backCellB.appendChild(blb);
+  backrow.appendChild(backCellB);
+
 
   const grid = document.getElementById("grid");
 
