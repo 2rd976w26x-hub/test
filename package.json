@@ -1,5 +1,5 @@
 {
-  "name": "cardkit-preview",
+  "name": "cardkit-preview-full",
   "version": "1.0.0",
   "private": true,
   "main": "server.js",

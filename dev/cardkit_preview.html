@@ -2,38 +2,56 @@
 <html lang="da">
 <head>
   <meta charset="UTF-8">
-  <title>CardKit – Preview</title>
+  <title>CardKit – Preview (Piratwhist v0.2.98 kort)</title>
   <link rel="stylesheet" href="../cardkit/cardkit.css">
   <style>
-    body{background:#0b1220;color:#fff;font-family:system-ui;padding:24px}
-    .row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
-    .hand .playingcard{margin-left:-36px}
-    .hand .playingcard:first-child{margin-left:6px}
+    body{
+      background:#0b1220;
+      color:#fff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      padding:24px;
+    }
+    h1{ margin-bottom: 6px; }
+    h2{ margin: 22px 0 8px; font-size: 18px; font-weight: 600; opacity:.9; }
+    .row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .hand .playingcard{ margin-left:-36px; }
+    .hand .playingcard:first-child{ margin-left:0; }
+    .note{ opacity:.75; font-size:14px; margin-top:6px; }
   </style>
 </head>
 <body>
-  <h1>CardKit – Preview</h1>
 
-  <h2>Normal</h2>
-  <div class="row" id="normal"></div>
+<h1>CardKit – kort (fra Piratwhist v0.2.98)</h1>
+<div class="note">Test: kan du skelne ♠ og ♣ når kun hjørnet er synligt?</div>
 
-  <h2>Overlappende hånd</h2>
-  <div class="row hand" id="hand"></div>
+<h2>1) Normal visning</h2>
+<div class="row" id="normal"></div>
 
-  <script type="module">
-    import { initCardKit, createCard } from "../cardkit/cardkit.js";
-    initCardKit({ backUrl: "../assets/card_back.png" });
+<h2>2) Overlappende hånd</h2>
+<div class="row hand" id="hand"></div>
 
-    const cards = [
-      {suit:"♠",rank:"A"},{suit:"♣",rank:"A"},{suit:"♥",rank:"A"},{suit:"♦",rank:"A"},
-      {suit:"♠",rank:"10"},{suit:"♣",rank:"10"},{suit:"♥",rank:"10"},{suit:"♦",rank:"10"},
-    ];
+<h2>3) Face-down reference</h2>
+<div class="row" id="back"></div>
 
-    const normal=document.getElementById("normal");
-    cards.forEach(c=>normal.appendChild(createCard(c)));
+<script type="module">
+  import { initCardKit, createCard } from "../cardkit/cardkit.js";
+  initCardKit({ backUrl: "../assets/card_back.png" });
 
-    const hand=document.getElementById("hand");
-    cards.forEach(c=>hand.appendChild(createCard(c)));
-  </script>
+  const cards = [
+    { suit:"S", rank:"A" }, { suit:"C", rank:"A" }, { suit:"H", rank:"A" }, { suit:"D", rank:"A" },
+    { suit:"S", rank:"10"}, { suit:"C", rank:"10"}, { suit:"H", rank:"10"}, { suit:"D", rank:"10"},
+    { suit:"S", rank:"K" }, { suit:"C", rank:"K" }, { suit:"H", rank:"K" }, { suit:"D", rank:"K" }
+  ];
+
+  const normal = document.getElementById("normal");
+  cards.forEach(c => normal.appendChild(createCard(c, { faceUp:true })));
+
+  const hand = document.getElementById("hand");
+  cards.forEach(c => hand.appendChild(createCard(c, { faceUp:true })));
+
+  const back = document.getElementById("back");
+  back.appendChild(createCard({suit:"S",rank:"A"}, { faceUp:false }));
+</script>
+
 </body>
 </html>
