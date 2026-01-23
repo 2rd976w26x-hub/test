@@ -1,9 +1,8 @@
-export const CARDKIT_VERSION = "1.1.0";
+export const CARDKIT_VERSION = "1.2.0";
 
 export function initCardKit(opts = {}){
   const root = document.documentElement;
   if (opts.backUrl) root.style.setProperty("--cardback-url", `url("${opts.backUrl}")`);
-  // Optional overrides
   if (opts.w) root.style.setProperty("--card-w", String(opts.w));
   if (opts.h) root.style.setProperty("--card-h", String(opts.h));
 }
@@ -78,21 +77,20 @@ export function buildCardSVG(card){
     svg.appendChild(t);
   }
 
-  // --- Face cards using your new images ---
+  // Face cards: K, D (Queen), J
   if (rank === "K" || rank === "D" || rank === "J"){
     const img = document.createElementNS(NS, "image");
-    // Use relative URL; works when served from /
     const href = rank === "K" ? "../assets/face_K.png" : (rank === "D" ? "../assets/face_D.png" : "../assets/face_J.png");
     img.setAttribute("href", href);
     img.setAttribute("x", "18");
-    img.setAttribute("y", "26");
+    img.setAttribute("y", "24");
     img.setAttribute("width", "64");
-    img.setAttribute("height", "88");
+    img.setAttribute("height", "92");
     img.setAttribute("preserveAspectRatio", "xMidYMid meet");
     svg.appendChild(img);
 
-    // Suit watermark
-    pip(50, 112, 26, 0);
+    // Small watermark suit
+    pip(50, 116, 24, 0);
     return svg;
   }
 

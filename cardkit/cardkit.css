@@ -1,6 +1,6 @@
 :root{
-  --card-w: 72px;
-  --card-h: 104px;
+  --card-w: 64px;
+  --card-h: 92px;
   --card-radius: 12px;
   --cardback-url: none;
 
@@ -8,7 +8,7 @@
   --card-text: #111;
   --card-red: #b00020;
   --card-border: rgba(0,0,0,.22);
-  --card-shadow: 0 6px 16px rgba(0,0,0,.25);
+  --card-shadow: 0 6px 16px rgba(0,0,0,.22);
 }
 
 .playingcard{
@@ -36,8 +36,8 @@
 }
 .playingcard .corner.tl{ left:6px; top:6px; }
 .playingcard .corner.br{ right:6px; bottom:6px; transform: rotate(180deg); }
-.playingcard .corner .rk{ font-size:14px; }
-.playingcard .corner .st{ font-size:16px; margin-top:0px; }
+.playingcard .corner .rk{ font-size:13px; }
+.playingcard .corner .st{ font-size:15px; margin-top:0px; }
 
 .cardface-svg{
   position:absolute;

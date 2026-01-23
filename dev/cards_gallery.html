@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kortoversigt – 52 + bagside</title>
+  <link rel="stylesheet" href="../cardkit/cardkit.css" />
+  <style>
+    body{
+      margin:0;
+      background: radial-gradient(1200px 700px at 20% 0%, #16233b 0%, #0b1220 60%, #070b12 100%);
+      color: #eaf0ff;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      padding: 22px;
+    }
+    h1{ margin: 0 0 6px; font-size: 34px; }
+    .sub{ opacity:.8; margin-bottom:18px; }
+    .panel{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 16px;
+      max-width: 1200px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(13, max-content);
+      gap: 10px 10px;
+      align-items:start;
+    }
+    .label{
+      text-align:center;
+      font-size:12px;
+      opacity:.8;
+      margin-top:6px;
+    }
+    .cell{ display:flex; flex-direction:column; align-items:center; }
+    .toprow{
+      display:flex;
+      gap:14px;
+      align-items:center;
+      margin-bottom: 14px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Kortoversigt</h1>
+  <div class="sub">52 kort + bagside. K & J = manden. D = damen.</div>
+
+  <div class="panel">
+    <div class="toprow" id="backrow"></div>
+    <div class="grid" id="grid"></div>
+  </div>
+
+<script type="module">
+  import { initCardKit, createCard } from "../cardkit/cardkit.js";
+  initCardKit({ backUrl: "../assets/card_back.png" });
+
+  const suits = [
+    { key:"S", sym:"♠" },
+    { key:"H", sym:"♥" },
+    { key:"D", sym:"♦" },
+    { key:"C", sym:"♣" },
+  ];
+
+  // Danish ranks: A K D J 10..2 (13 ranks)
+  const ranks = ["A","K","D","J","10","9","8","7","6","5","4","3","2"];
+
+  const backrow = document.getElementById("backrow");
+  const backCell = document.createElement("div");
+  backCell.className = "cell";
+  backCell.appendChild(createCard({suit:"S",rank:"A"}, {faceUp:false}));
+  const bl = document.createElement("div");
+  bl.className = "label";
+  bl.textContent = "Bagside";
+  backCell.appendChild(bl);
+  backrow.appendChild(backCell);
+
+  const grid = document.getElementById("grid");
+
+  // Build rows by suit: each suit is a row of 13 ranks
+  for (const s of suits){
+    for (const r of ranks){
+      const cell = document.createElement("div");
+      cell.className = "cell";
+      cell.appendChild(createCard({suit:s.key, rank:r}, {faceUp:true}));
+      const lab = document.createElement("div");
+      lab.className = "label";
+      lab.textContent = r + s.sym;
+      cell.appendChild(lab);
+      grid.appendChild(cell);
+    }
+  }
+</script>
+</body>
+</html>
