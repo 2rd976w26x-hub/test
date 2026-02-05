@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Piratwhist v1.0.1.1 · Spil</title>
+  <link rel="stylesheet" href="/piratwhist.css" />
+  <link rel="stylesheet" href="/online.css" />
+  <link rel="stylesheet" href="/online_pages.css" />
+  <link rel="stylesheet" href="/guide_mode.css" />
+  <link rel="stylesheet" href="/feedback.css" />
+<body class="page-play">
+  <div class="app">
+    <main class="main">
+
+<!-- NOTE: Top bar removed to maximize board area during play.
+     Status + room info is shown in the bottom bar. -->
+
+<div class="twoCol playLayout">
+
+  <section class="card tight panel centerArea boardPanel">
+    <div id="olCenter" class="center playBoard">
+      <div class="board">
+
+        <!-- Seats are injected dynamically so the board can handle 2–8 players. -->
+        <div id="olBoardSeats" class="boardSeats" aria-hidden="false"></div>
+
+        <!-- No global deck pile on the board.
+             Won tricks are represented per-seat via each player's mini pile (seatPile). -->
+
+        <!-- Trick slots are injected dynamically (one per player) -->
+        <div class="pile centerPile" id="olPile" title="Stik (midt)">
+          <div id="olTrickSlots" class="trickSlots"></div>
+        </div>
+
+        <!-- Deck anchor for deal-animation (ghost/back cards fly from here) -->
+        <div id="olDeck" class="deck olDeck" aria-hidden="true" title="Kortbunke"></div>
+      </div>
+    </div>
+
+    
+    <!-- PC HUD (corners) -->
+    <div class="pcHud" aria-hidden="false">
+      <div class="hudBox hudTL" role="status" aria-live="polite">
+        <span class="pill">Du: <b id="pcSeatLabel">-</b></span>
+        <span class="pill">Runde: <b id="pcRoundLabel">-</b></span>
+      </div>
+      <div class="hudBox hudTR" role="status" aria-live="polite">
+        <span class="pill">Leader: <b id="pcLeader">-</b></span>
+        <span class="pill">Kulør: <b id="pcLeadSuit">-</b></span>
+      </div>
+      <div class="hudBox hudBR">
+        <button id="pcRules" class="ghost" title="Åbn regler">
+          <span class="ico" aria-hidden="true">📖</span><span class="lbl">Regler</span>
+        </button>
+        <button id="pcLeave" class="ghost" title="Forlad spillet">
+          <span class="ico" aria-hidden="true">🚪</span><span class="lbl">Forlad</span>
+        </button>
+      </div>
+      <div class="handNoFly" aria-hidden="true"></div>
+    </div>
+
+    <aside id="pcLayoutTuner" class="pcLayoutTuner" hidden>
+      <div class="pcLayoutTuner__title">PC layout-tuner</div>
+      <div class="pcLayoutTuner__row">
+        <label for="pcLayoutSeatSelect">Spiller</label>
+        <select id="pcLayoutSeatSelect"></select>
+        <label for="pcLayoutStep">Trin (%)</label>
+        <input id="pcLayoutStep" type="number" min="0.1" step="0.5" value="1" />
+        <div class="pcLayoutTuner__stepPresets" role="group" aria-label="Trin presets">
+          <button class="ghost pcLayoutTuner__step" type="button" data-pc-step="0.5">0.5</button>
+          <button class="ghost pcLayoutTuner__step" type="button" data-pc-step="1">1</button>
+          <button class="ghost pcLayoutTuner__step" type="button" data-pc-step="2">2</button>
+        </div>
+      </div>
+
+      <div class="pcLayoutTuner__row">
+        <label for="pcDealGap">Uddeling pause (ms)</label>
+        <input id="pcDealGap" type="number" min="0" max="400" step="5" value="55" />
+        <input id="pcDealGapRange" type="range" min="0" max="400" step="5" value="55" aria-label="Uddeling pause" />
+        <button id="pcDealGapReset" class="ghost" type="button">Reset</button>
+      </div>
+      <div class="pcLayoutTuner__controls" role="group" aria-label="Flyt spiller">
+        <div></div>
+        <button id="pcLayoutUp" class="ghost" type="button" aria-label="Flyt op">⬆️</button>
+        <div></div>
+        <button id="pcLayoutLeft" class="ghost" type="button" aria-label="Flyt venstre">⬅️</button>
+        <button id="pcLayoutDown" class="ghost" type="button" aria-label="Flyt ned">⬇️</button>
+        <button id="pcLayoutRight" class="ghost" type="button" aria-label="Flyt højre">➡️</button>
+      </div>
+      <div class="pcLayoutTuner__row">
+        <button id="pcLayoutReset" class="ghost" type="button">Nulstil valgt</button>
+        <button id="pcLayoutResetAll" class="ghost" type="button">Nulstil alle</button>
+        <button id="pcLayoutCopy" class="ghost" type="button">Kopiér værdier</button>
+        <button id="pcLayoutPaste" class="ghost" type="button">Indsæt værdier</button>
+      </div>
+      <textarea id="pcLayoutOutput" rows="6" readonly></textarea>
+      <div class="pcLayoutTuner__hint">Kun synlig for spillernavn <b>LaBA</b>.</div>
+    </aside>
+
+    <!-- Bottom bar (replaces the old top header + the 'Spil' section) -->
+    <div class="bottomBar" role="status" aria-live="polite">
+      <div class="bottomLeft">
+        <span class="pill roomPill">Rum: <b id="olRoomLabel">-</b></span>
+        <span class="pill">Du: <b id="olSeatLabel">-</b></span>
+        <span class="pill ghost" id="olInfo">-</span>
+      </div>
+      <div class="bottomMid">
+        <span class="pill">Leader: <b id="olLeader">-</b></span>
+        <span class="pill">Kulør: <b id="olLeadSuit">-</b></span>
+      </div>
+      <div class="bottomRight">
+        <button id="olRules" class="ghost" title="Åbn regler">
+          <span class="ico" aria-hidden="true">📖</span><span class="lbl">Regler</span>
+        </button>
+        <button id="olLeaveRoom" class="danger">
+          <span class="ico" aria-hidden="true">🚪</span><span class="lbl">Forlad</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="card tight handDock" style="margin:0;">
+      <div id="olHands" class="hands"></div>
+      <div id="olWarn" class="warn hidden"></div>
+    </div>
+  </section>
+</div>
+
+
+
+<!-- Scroll-down results (desktop): snapshot + round history -->
+<section class="card" id="olScrollResults" aria-label="Resultater og historik">
+  <h2>Oversigt (alle runder)</h2>
+  <div class="row gap">
+    <div class="pill">Runde: <span id="olResRound">-</span></div>
+    <div class="pill">Kort pr. spiller: <span id="olResCards">-</span></div>
+  </div>
+
+  <div class="tableWrap">
+    <table class="t" id="olHistoryTable"></table>
+  </div>
+  <div class="sub">Tip: Scroll ned for at se oversigten under spillet (PC og mobil).</div>
+</section>
+
+
+    </main>
+
+    <footer class="footer">
+      <div class="brand">
+        <div class="logo">🏴‍☠️</div>
+        <div>
+          <div class="title">Piratwhist <span class="ver">v1.0.1.1</span></div>
+          <div class="sub">Online spil · spar er trumf · bekend kulør</div>
+        </div>
+      </div>
+      <div class="nav">
+        <a class="linkbtn" href="/score.html">Start</a>
+        <a class="linkbtn" href="/online.html">Online</a>
+        <a class="linkbtn" href="/score.html">Point-tavle</a>
+        <a class="linkbtn ghost" href="/rules.html">Regler</a>
+      </div>
+    </footer>
+
+  </div>
+  <script src="/pw_telemetry.js"></script>
+  <script src="/feedback.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="/guide_scenes.js"></script>
+  <script src="/guide_overlay.js"></script>
+  <script src="/online.js"></script>
+</body>
+</html>

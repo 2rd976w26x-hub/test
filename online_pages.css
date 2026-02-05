@@ -1,0 +1,785 @@
+/* Online pages layout helpers */
+.page-bidding .oppWrap{
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.page-bidding .oppTitle{
+  margin: 0 0 6px 0;
+  font-size: 16px;
+  opacity: 0.95;
+}
+.page-bidding .oppCards{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+}
+.page-bidding .oppCards .bidCardSlot{
+  min-width: 86px;
+}
+.page-bidding .oppHint{
+  margin-top: 6px;
+  text-align: center;
+  opacity: 0.85;
+  font-size: 12px;
+}
+/* Page layouts for split-phase online UI (v0.2) */
+html, body { height: 100%; }
+.app { min-height: 100vh; display: flex; flex-direction: column; }
+.top { position: sticky; top: 0; z-index: 5; backdrop-filter: blur(8px); }
+.main { flex: 1; display: flex; flex-direction: column; gap: 12px; }
+.twoCol { flex: 1; display: grid; grid-template-columns: 340px 1fr; gap: 12px; align-items: start; }
+@media (max-width: 860px){
+  .twoCol { grid-template-columns: 1fr; }
+}
+.panel { height: 100%; }
+.card.tight { padding: 14px; }
+.small { font-size: 0.9rem; opacity: .9; }
+.handDock{ margin-top:auto; }
+
+/* Bidding: show the player's hand at full brightness even though cards are not playable. */
+body.page-bidding .cardbtn:disabled{ opacity: 1; }
+body.page-bidding .cardbtn:disabled .playingcard{ filter: none; }
+
+/* Bids list items (also used as deal-animation targets on the bidding page) */
+.bidItem{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 8px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(0,0,0,.18);
+  margin: 2px 4px 2px 0;
+  white-space: nowrap;
+}
+
+/* Overlay hand onto the board (more realistic) */
+body.page-play .boardPanel{ position:relative; }
+body.page-play .handDock{
+  position:absolute;
+  /* PC: Dock the hand in the lower-left area (red frame) */
+  left: clamp(24px, 4vw, 60px);
+  right: auto;
+  bottom: clamp(96px, 12vh, 170px);
+  transform: none;
+  width: clamp(360px, 58vw, 900px);
+  z-index: 40;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  pointer-events: auto;
+}
+body.page-play .handDock.handDockAuto{
+  position: absolute !important;
+  bottom: auto !important;
+}
+body.page-play .handDock #olHands{ pointer-events:auto; }
+body.page-play .handDock #olWarn{ pointer-events:auto; }
+body.page-play .handDock .hand{
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+body.page-play .handDock .hand .head{ display:none; }
+body.page-play .handDock .cards{
+  flex-wrap: nowrap;
+  overflow: visible;
+  padding: 16px 8px 6px;
+  gap: 0;
+  align-items: flex-end;
+  --hand-overlap: -28px;
+}
+body.page-play .handDock .cards.handLocked{
+  --hand-overlap: -34px;
+}
+body.page-play .handDock .cards.handLocked .cardbtn{
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 1;
+}
+body.page-play .handDock .cards.handLocked .cardbtn .playingcard{
+  filter: grayscale(0.1);
+}
+body.page-play .handDock .cards:not(.handLocked) .cardbtn:not(:disabled){
+  transform: translateY(-10%);
+}
+body.page-play .handDock .cards .cardbtn{
+  margin-left: var(--hand-overlap);
+}
+body.page-play .handDock .cards .cardbtn:first-child{ margin-left: 0; }
+body.page-play .handDock .cards .cardbtn{
+  position: relative;
+  z-index: 1;
+}
+body.page-play .handDock .cards .cardbtn:hover{ z-index: 5; }
+body.page-play .handDock .cards .cardbtn:focus{ z-index: 6; }
+
+/* Bottom seat should stay visible because the hand is positioned above it. */
+
+@media (max-width: 860px){
+  /* Mobile: place the hand higher so it uses the otherwise empty area under the board,
+     and stays clear of the bottom seat + bottom bar. */
+  /* Preview: move the hand into the lower "unused" area of the board (above the bottom bar)
+     and keep the bottom seat readable. */
+  /* Mobile: dock the hand low (blue box) and keep it from covering HUD text. */
+  body.page-play .handDock{ left: 50%; right: auto; transform: translateX(-50%); bottom: 104px; width: 98%; z-index: 40; }
+  body.page-play .handDock .cards .cardbtn{ margin-left: -22px; }
+}
+@media (max-width: 480px){
+  body.page-play .handDock{ bottom: 96px; }
+}
+
+.centerArea { display:flex; flex-direction:column; gap:12px; min-height: 0; }
+
+/* The board should use all available vertical space (avoid unused gap above the bottom bar).
+   The inner .board must stretch to the flexed container height. */
+.playBoard { flex:1; min-height: 0; }
+.playBoard .board{ height: 100%; min-height: 0; }
+
+/* Deck anchor used for deal-animation (ghost cards fly from here) */
+.olDeck{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 54px;
+  height: 76px;
+  border-radius: 12px;
+  opacity: .82;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.miniDeckRow{ display:flex; justify-content:flex-end; margin:-6px 0 6px; }
+.miniDeck{ width: 48px; height: 68px; border-radius: 12px; opacity:.9; pointer-events:none; }
+
+
+/* === Round table board === */
+
+.playLayout { grid-template-columns: 360px 1fr; }
+
+body.page-play .twoCol.playLayout{ grid-template-columns: 1fr !important; }
+/* Let the board stretch instead of forcing a fixed minimum height (prevents unused empty space). */
+.playBoard { min-height: 0; }
+.board {
+  position: relative;
+  width: 100%;
+  min-height: 0;
+  border-radius: 22px;
+  background: radial-gradient(ellipse at center, rgba(255,255,255,.08) 0%, rgba(0,0,0,.18) 58%, rgba(0,0,0,.28) 100%);
+  border: 1px solid rgba(255,255,255,.08);
+  overflow: hidden;
+  --seat-scale: 1;
+  --seat-width: clamp(120px, 12vw, 190px);
+  --seat-max: min(26vw, 220px);
+  --seat-edge-x: clamp(12px, 2.6vw, 32px);
+  --seat-edge-y: clamp(12px, 3vh, 36px);
+  --seat-bottom-gap: clamp(92px, 12vh, 160px);
+}
+
+/* Mobile/compact play: use the full viewport and avoid vertical scrolling */
+@media (max-width: 860px){
+  /* Mobile play: allow vertical scroll ONLY for the results section below the fixed play scene.
+     Keep horizontal overflow hidden to avoid side-scrolling. */
+  html, body{ height: auto; min-height: 100dvh; overflow-x: hidden; }
+  body.page-play{ overflow-y: auto; }
+  body.page-play .app{ min-height: 100dvh; height: auto; overflow: visible; }
+  body.page-play .main{ flex: 1; min-height: 0; overflow: visible; }
+
+/* Hide PC HUD on mobile (it caused duplicate HUD and overlap). */
+  body.page-play .pcHud{ display:none !important; }
+
+  /* Keep the board in one column; the panel is an overlay (can be toggled). */
+  body.page-play .playLayout{ grid-template-columns: 1fr; }
+  body.page-play .centerArea{ gap: 8px; }
+
+  /* Give the board the screen; HUD and hand stick within the play panel. */
+  body.page-play .playBoard{ min-height: 0; }
+  body.page-play .board{ min-height: 0; height: 100dvh; }
+
+  /* Sticky bottom HUD: stays while board is visible, scrolls away for results. */
+  body.page-play{ --mobileHudH: 86px; }
+  body.page-play .bottomBar{
+    position: sticky;
+    left: 10px;
+    right: 10px;
+    bottom: max(10px, env(safe-area-inset-bottom));
+    z-index: 30;
+  }
+
+  /* Sticky hand above the HUD so cards don't cover the score table when scrolling. */
+  body.page-play .handDock{
+    position: sticky;
+    left: 50% !important;
+    right: auto !important;
+    transform: translateX(-50%) !important;
+    bottom: calc(var(--mobileHudH) - 6px + max(10px, env(safe-area-inset-bottom)));
+    width: 98% !important;
+    z-index: 40;
+  }
+
+  /* Hide the footer on the play page to save space */
+  body.page-play .footer{ display:none; }
+}
+
+@media (max-width: 480px){
+  body.page-play{ --mobileHudH: 92px; }
+}
+
+/* v1.0.1.1: dynamic seats/trick slots (2–8 players) */
+.boardSeats{
+  position:absolute;
+  inset:0;
+  z-index:4;
+}
+
+.boardSeats .seat{
+  position:absolute;
+  transform:translate(-50%,-50%) scale(var(--seat-scale, 1));
+  text-align:center;
+  width: var(--seat-width);
+  max-width: var(--seat-max);
+}
+
+.boardSeats .seatBadges{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  justify-content:center;
+}
+
+/* Visual trick counter (at-a-glance) */
+.boardSeats .trickViz{
+  display:flex;
+  gap:4px;
+  justify-content:center;
+  align-items:center;
+  margin-top:6px;
+  min-height: 12px;
+}
+.boardSeats .trickViz .dot{
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.85);
+  box-shadow: 0 2px 6px rgba(0,0,0,.35);
+}
+.boardSeats .trickViz .more,
+.boardSeats .trickViz .zero{
+  font-size: .85rem;
+  font-weight: 900;
+  opacity: .9;
+}
+
+.trickSlots{
+  position:absolute;
+  inset:0;
+}
+
+.trickSlots .played{
+  position:absolute;
+  transform:translate(-50%,-50%);
+}
+
+
+/* Ensure center trick area + played cards always render above seats */
+.deck{ z-index: 1; }
+.seat{ z-index: 2; }
+.centerPile{ z-index: 3; }
+.played{ z-index: 4; pointer-events:none; }
+.centerPile {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 380px;
+  height: 380px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  /* Let the played cards overlap the circle edge (more realistic) */
+  overflow: visible;
+  border: 2px dashed rgba(255,255,255,.18);
+  background: transparent;
+  background-image: none;
+  box-shadow: none;
+}
+.played {
+  position: absolute;
+  /* v1.0.1.1: played cards on the table are ~20% larger for readability */
+  width: 125px;
+  height: 175px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.played :is(button,.cardEl){ transform: scale(v1.0.1.1); }
+
+/* Bigger cards on the play page */
+/* Larger cards on the play page */
+body.page-play .playingcard{ width:96px; height:134px; border-radius:16px; }
+@media (max-width: 480px){
+  body.page-play .playingcard{ width:74px; height:106px; border-radius:14px; }
+}
+/* Push played cards slightly outside the circle so they overlap the edge */
+.played-top { left: 50%; top: -34px; transform: translateX(-50%); }
+.played-bottom { left: 50%; bottom: -34px; transform: translateX(-50%); }
+.played-left { left: -34px; top: 50%; transform: translateY(-50%); }
+.played-right { right: -34px; top: 50%; transform: translateY(-50%); }
+
+.seat{
+  position:absolute;
+  width: var(--seat-width);
+  max-width: var(--seat-max);
+  padding: 6px 8px;
+  border-radius: 18px;
+  background: rgba(0,0,0,.10);
+  border: 1px solid rgba(255,255,255,.10);
+}
+
+/* During play, keep Bud + Stik visible; hide only Total to reduce clutter */
+body.phase-playing .seatBadges .totalChip,
+body.phase-between_tricks .seatBadges .totalChip{ display:none; }
+
+body.page-play .footer{ display:none; }
+
+/* Bottom bar replaces the removed top header */
+.bottomBar{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  padding:10px 12px;
+  border-radius: 18px;
+  background: rgba(0,0,0,.22);
+  border: 1px solid rgba(255,255,255,.10);
+  position: relative;
+  z-index: 20; /* keep HUD above the hand/cards on mobile */
+}
+.bottomLeft,.bottomMid,.bottomRight{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+.bottomMid{ justify-content:center; flex: 1; }
+.bottomRight{ justify-content:flex-end; }
+
+/* Bottom bar buttons can render as compact icon-buttons on mobile */
+.bottomBar .ico{ display:none; }
+.bottomBar .lbl{ display:inline; }
+
+/* If user hides the HUD on small screens (Panel button), reclaim the space */
+/* v1.0.1.1: Do NOT hide the bottomBar (it contains the only way to restore UI). */
+body.hideBottomHud .bottomBar{ display:flex !important; }
+
+/* v1.0.1.1: When the players panel is open on mobile, hide only HUD text to avoid overlap.
+   Keep the bottomRight buttons (Panel/Regler/Forlad) always visible. */
+@media (max-width: 860px){
+  body.hideBottomHud.page-play .handDock{ bottom: 16px !important; }
+}
+
+/* v1.0.1.1: The players panel is always available as an overlay (toggle controls visibility).
+   Do NOT force-hide it by phase, otherwise the Panel button appears broken. */
+/* Seat player name must always remain readable on the board.
+   Mobile especially can have long names, so clamp to max 2 lines
+   and auto-scale the font slightly to avoid clipping. */
+.seatName{
+  font-weight: 800;
+  letter-spacing: .2px;
+  line-height: 1.05;
+  font-size: clamp(12px, 2.4vw, 16px);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+/* v1.0.1.1: Mobile 8-player square layout helpers (used when JS applies anchor-* classes) */
+@media (max-width: 520px){
+  .boardSeats .seat.anchor-left{ text-align:left; }
+  .boardSeats .seat.anchor-right{ text-align:right; }
+  .boardSeats .seat.anchor-center{ text-align:center; }
+
+  .boardSeats .seat.anchor-left .seatBadges,
+  .boardSeats .seat.anchor-left .trickViz{ justify-content:flex-start; }
+  .boardSeats .seat.anchor-right .seatBadges,
+  .boardSeats .seat.anchor-right .trickViz{ justify-content:flex-end; }
+
+  /* Keep mid-side seats (C2/C6) narrower so they never overlap the center image */
+  .boardSeats .seat.mid-side{ width: 26%; max-width: 26%; }
+
+  .boardSeats .seat{
+    width: clamp(110px, 34vw, 160px);
+    max-width: 42%;
+  }
+
+  .boardSeats .seat{
+    padding: 4px 6px;
+  }
+
+  /* Allow long names to wrap up to 2 lines instead of increasing width */
+  .boardSeats .seat .seatName{
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .seatBadges{ margin-top: 4px; gap: 4px; }
+  .chip{ font-size: .72rem; padding: 2px 6px; }
+
+  .seatPile,
+  .seatPile::before,
+  .seatPile::after{
+    width: 36px;
+    height: 50px;
+    border-radius: 8px;
+  }
+  .seatPile{ margin-top: 6px; }
+}
+.seatBadges{ margin-top:6px; display:flex; flex-wrap:wrap; gap:6px; justify-content:center; }
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:3px 7px;
+  border-radius: 999px;
+  font-size: .78rem;
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.08);
+}
+.chip.ghost{ opacity: .75; }
+/* Per-seat won-tricks mini pile (destination for the sweep animation)
+   Rendered as a small stack of cards near each seat (more realistic than a global pile). */
+.seatPile{
+  margin-top: 8px;
+  width: 44px;
+  height: 60px;
+  border-radius: 10px;
+  /* Per-seat won-tricks pile uses the fixed card back image */
+  background-image: var(--cardback-url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255,255,255,.14);
+  position: relative;
+  overflow: visible;
+}
+.seatPile::before,
+.seatPile::after{
+  content: "";
+  position:absolute;
+  left: 0;
+  top: 0;
+  width: 44px;
+  height: 60px;
+  border-radius: 10px;
+  background-image: var(--cardback-url);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid rgba(255,255,255,.10);
+}
+.seatPile::before{ transform: translate(4px, 4px) rotate(4deg); opacity: .55; }
+.seatPile::after{ transform: translate(8px, 8px) rotate(8deg); opacity: .30; }
+
+/* Deal/deck anchor should not be visible on the play board (deal happens on bidding page) */
+body.page-play #olDeck{ display:none !important; }
+
+/* v1.0.1.1: Room code should not be visible on the play board (still shown in lobby/bidding). */
+body.page-play .bottomBar .bottomLeft .pill:first-child{ display:none !important; }
+
+.seat-top { left: 50%; top: var(--seat-edge-y); transform: translateX(-50%); text-align:center; }
+.seat-bottom { left: 50%; bottom: var(--seat-bottom-gap); transform: translateX(-50%); text-align:center; }
+.seat-left { left: var(--seat-edge-x); top: 50%; transform: translateY(-50%); }
+.seat-right { right: var(--seat-edge-x); top: 50%; transform: translateY(-50%); }
+
+@media (min-width: 900px){
+  .board{
+    --seat-width: clamp(130px, 11.5vw, 200px);
+    --seat-max: min(24vw, 240px);
+    --seat-edge-x: clamp(16px, 2.8vw, 40px);
+    --seat-edge-y: clamp(18px, 3.6vh, 44px);
+    --seat-bottom-gap: clamp(110px, 14vh, 190px);
+  }
+}
+
+/* No global deck pile on the play board in v1.0.1.1+ (we use per-seat piles instead). */
+
+/* Prevent overflow in the left panel on the play page */
+
+/* Mobile */
+@media (max-width: 860px){
+  .playLayout { grid-template-columns: 1fr; }
+  .boardPanel { order: 1; }
+  .board { min-height: 420px; }
+  .board { --seat-scale: 0.92; }
+  /* Mobile seats: keep them around the board (top/left/right/bottom).
+     Make left/right seats narrower to avoid overlapping the center image.
+     Seats may be taller (name + badges) without crowding the board. */
+  .seat { width: 32%; max-width: 32%; padding: 4px 6px; }
+  .seat-left, .seat-right { top: 50%; transform: translateY(-50%); }
+  .seat-left { left: 10px; }
+  .seat-right { right: 10px; }
+  .seat-top { left: 50%; top: max(44px, env(safe-area-inset-top) + 10px); transform: translateX(-50%); text-align:center; }
+  /* Pull bottom seat up under the center image (so the very bottom area is free for the hand) */
+  .seat-bottom { left: 50%; bottom: calc(var(--mobileHudH) + 8px); transform: translateX(-50%); text-align:center; }
+  .centerPile { width: 280px; height: 280px; }
+  .played-top { top: -22px; }
+  .played-bottom { bottom: -22px; }
+  .played-left { left: -22px; }
+  .played-right { right: -22px; }
+}
+@media (max-width: 480px){
+  .board { min-height: 380px; }
+  .seat { font-size: .92rem; }
+  .chip { font-size: .72rem; padding: 3px 7px; }
+  .centerPile { width: 220px; height: 220px; }
+  .played { width: 110px; height: 156px; }
+  .played-top { top: -17px; }
+  .played-bottom { bottom: -17px; }
+  .played-left { left: -17px; }
+  .played-right { right: -17px; }
+}
+
+/* === Mobile play polish (compact, no scroll, clear layering) === */
+@media (max-width: 520px){
+  /* Keep the center trick area compact so it never dominates the viewport */
+  /* v1.0.1.1: Shift the center (table/trick) upward on mobile to use the empty top
+     space and to create more vertical room for the hand row (no scroll). */
+  .centerPile{ width: min(62vmin, 210px); height: min(62vmin, 210px); top: 44%; }
+
+  /* Compact bottom bar and use icons to save horizontal space */
+  .bottomBar{ padding: 8px 10px; border-radius: 16px; gap: 8px; }
+  .bottomLeft,.bottomMid{ gap: 6px; }
+  .bottomRight{ gap: 6px; }
+  .bottomBar .ico{ display:inline; }
+  .bottomBar .lbl{ display:none; }
+  .bottomRight button{ padding: 8px 10px; min-width: 44px; }
+
+  /* Hand overlay: center it and keep it safely above the bottom bar */
+  body.page-play .handDock{
+    left: 50%;
+    transform: translateX(-50%);
+    width: 98%;
+    bottom: 64px;
+  }
+
+  /* Ensure no "panel" background appears behind the hand */
+  body.page-play .handDock .cards{ background: transparent !important; border: none !important; box-shadow:none !important; }
+
+  /* Slightly tighter fanned hand on small screens */
+  body.page-play .handDock .cards .cardbtn{ margin-left: -20px; }
+}
+
+/* Extra-compact mobile polish (<=520px) based on the agreed layout sketch:
+   - keep the center pile smaller using vmin
+   - keep the hand clear of the bottom bar
+   - render bottom bar actions as icon buttons to save width
+   - ensure the hand area has no background panel */
+@media (max-width: 520px){
+  /* Compact center pile so it never becomes a huge square on narrow screens */
+  .centerPile{ width: min(62vmin, 210px); height: min(62vmin, 210px); top: 44%; }
+  .seat { width: 34%; max-width: 34%; }
+  .seat-top { top: max(36px, env(safe-area-inset-top) + 8px); }
+  .seat-bottom { bottom: calc(var(--mobileHudH) + 4px); }
+
+  /* Hand: keep it above the bottom bar and fully transparent */
+  body.page-play .handDock{
+    bottom: 64px;
+    width: 98%;
+  }
+  body.page-play .handDock .cards{ background: transparent !important; border: none !important; box-shadow: none !important; }
+
+  /* Bottom bar: compact + icon actions */
+  .bottomBar{ padding: 8px 10px; gap: 8px; }
+  .bottomRight{ gap: 6px; }
+  .bottomBar .ico{ display:inline; }
+  .bottomBar .lbl{ display:none; }
+  .bottomRight button{ padding: 8px 10px; min-width: 44px; }
+}
+
+.scoreRow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  align-items:center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+.scoreRow:last-child{ border-bottom: none; }
+.pill.tiny{ padding: 3px 8px; font-size: .82rem; }
+
+/* (deprecated) Older hand-overlay rules removed in v1.0.1.1.
+   The authoritative hand overlay + spacing rules live near the top of this file. */
+
+
+
+/* v1.0.1.1 PC HUD: remove bottom bar on play board and move info to corners */
+@media (min-width: 900px) {
+  body.page-play .bottomBar{
+    display:none !important;
+  }
+
+  body.page-play .pcHud{
+    position: absolute;
+    inset: 0;
+    --pc-hud-pad: clamp(10px, 1.4vw, 20px);
+    pointer-events: none;
+    z-index: 70; /* above seats, below flycards (which are fixed/high) */
+  }
+  body.page-play .pcHud .hudBox{
+    position:absolute;
+    display:flex;
+    gap:8px;
+    flex-wrap: wrap;
+    max-width: clamp(220px, 32vw, 420px);
+    pointer-events:none;
+  }
+  body.page-play .pcHud .hudTL{ top: var(--pc-hud-pad); left: var(--pc-hud-pad); }
+  body.page-play .pcHud .hudTR{ top: var(--pc-hud-pad); right: var(--pc-hud-pad); justify-content:flex-end; }
+  body.page-play .pcHud .hudBR{ right: var(--pc-hud-pad); bottom: var(--pc-hud-pad); flex-direction: column; align-items:flex-end; gap:10px; }
+
+  /* Compact buttons in corner */
+  body.page-play .pcHud .hudBR button{
+    pointer-events:auto;
+    min-width: 120px;
+  }
+  /* Hide room label on play page HUD */
+  body.page-play #olRoomLabel{ display:none !important; }
+  body.page-play .pill.roomPill{ display:none !important; }
+}
+
+/* v1.0.1.1 no-fly zone helper class for PC overlap avoidance */
+@media (min-width: 900px) {
+  body.page-play .handNoFly{
+    position:absolute;
+    /* Match the PC hand dock area so seats can avoid overlapping it. */
+    left: clamp(24px, 4vw, 60px);
+    bottom: clamp(96px, 12vh, 170px);
+    width: clamp(360px, 58vw, 900px);
+    height: clamp(180px, 28vh, 260px);
+    pointer-events:none;
+    opacity:0; /* invisible marker */
+  }
+}
+
+/* =========================================================
+   Dev debug overlay (enabled with ?debug=1 or localStorage PW_DEBUG_OVERLAY=1)
+   ========================================================= */
+#pwDebugOverlay{
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  pointer-events: none;
+}
+#pwDebugOverlay .pwDbgBox{
+  position:absolute;
+  border: 2px solid rgba(0,255,255,.75);
+  background: rgba(0,255,255,.08);
+  border-radius: 10px;
+}
+#pwDebugOverlay .pwDbgZone{
+  position:absolute;
+  border: 2px dashed rgba(0,255,0,.75);
+  background: rgba(0,255,0,.08);
+  border-radius: 10px;
+}
+#pwDebugOverlay .pwDbgLabel{
+  position:absolute;
+  left:6px;
+  top:6px;
+  font: 12px/1.2 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: rgba(255,255,255,.92);
+  background: rgba(0,0,0,.45);
+  padding: 3px 6px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+
+/* ===== Scroll-down results on play page (desktop only) ===== */
+#olScrollResults{ margin: 14px 0 0; }
+@media (max-width: 760px){
+  /* Mobile: allow scrolling DOWN to the results table.
+     IMPORTANT: the play scene must NOT sit on top of the results while scrolling.
+     Using sticky/fixed for the whole play scene can cause iOS gesture-locks and
+     makes the hand/buttons overlap the table. So on mobile we keep the play scene
+     in normal flow (full viewport height), then results come directly after.
+   */
+  html, body{ height: auto; min-height: 100dvh; overflow-x: hidden; }
+  body.page-play{ overflow-y:auto; -webkit-overflow-scrolling: touch; }
+  body.page-play .app{ height:auto; min-height:100dvh; }
+  body.page-play .main{ height:auto; overflow:visible; }
+
+  /* The play scene occupies the first screen, then scroll reveals results. */
+  body.page-play .twoCol.playLayout{
+    position: relative;
+    top: auto;
+    height: 100dvh;
+    overflow: hidden; /* keep the hand/ghosts from bleeding into the results */
+    z-index: 10;
+    background: rgba(0,0,0,.0);
+  }
+
+  /* Results are in normal flow right after the play scene. */
+  #olScrollResults{ display:block; margin-top: 14px; }
+}
+
+
+@media (min-width: 761px){
+  html, body{ height:auto; overflow-y:auto; }
+  body.page-play{ overflow-y:auto; }
+  body.page-play .app{ height:auto; min-height:100vh; overflow:visible; }
+  body.page-play .main{ height:auto; overflow:visible; }
+  body.page-play .playLayout{ min-height:100vh; }
+}
+
+
+/* --- Bidding: cardsPer==1 reveal rule (opponents shown, own hidden) --- */
+.page-bidding .cards.bidReveal{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  padding-top: 6px;
+}
+.page-bidding .bidCardSlot{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 76px;
+}
+.page-bidding .bidCardSlot .bidName{
+  font-size: 12px;
+  line-height: 1.1;
+  opacity: 0.92;
+  text-align: center;
+  max-width: 110px;
+  word-break: break-word;
+}
+
+
+/* History table compact cells */
+#olHistoryTable td.rCell{
+  text-align: center;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+
+
+/* Name list (lobby): show full names (wrap) + tooltip */
+#olNames .nameItem{
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: rgba(255,255,255,.03);
+  color: inherit;
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.15;
+}

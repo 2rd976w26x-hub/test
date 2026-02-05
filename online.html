@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Piratwhist v1.0.1.1 · Online</title>
+  <link rel="stylesheet" href="/pw_mini.css" />
+  <link rel="stylesheet" href="/guide_mode.css" />
+  <link rel="stylesheet" href="/feedback.css" />
+
+<body class="pwPage">
+  <header class="pwHeader">
+    <div class="pwBrand">
+      <div class="pwTitle">Piratwhist</div>
+      <div class="pwVersion">v1.0.1.1</div>
+    </div>
+    <div class="pwPills">
+      <a class="pwBtn pwBtnSecondary" href="/piratwhist.html">← Tilbage</a>
+      <a class="pwBtn pwBtnSecondary" href="/rules.html">Regler</a>
+    </div>
+  </header>
+
+  <main class="pwMain">
+    <h1>Online multiplayer</h1>
+    <p class="pwSubtitle">Opret et nyt rum eller join et eksisterende.</p>
+
+    <section class="pwPanel" id="olOnlineRoomPanel">
+      <div class="pwField">
+        <label class="pwLabel" for="olMyName">Dit navn</label>
+        <input id="olMyName" class="pwInput" placeholder="Dit navn" value="Spiller 1" />
+      </div>
+
+      <div class="pwField">
+        <label class="pwLabel" for="olRoomCode">Rumkode (4 tal)</label>
+        <input id="olRoomCode" class="pwInput" placeholder="1234" inputmode="numeric" maxlength="4" />
+      </div>
+
+      <div class="pwRow">
+        <button id="olCreateRoom" class="pwBtn pwBtnPrimary" type="button">Opret online-rum</button>
+        <button id="olJoinRoom" class="pwBtn pwBtnSecondary" type="button">Join online-rum</button>
+      </div>
+
+      <div id="olRoomStatus" class="pwHint" aria-live="polite"></div>
+      <div id="olRoomWarn" class="pwWarn" aria-live="polite"></div>
+    </section>
+  </main>
+
+  <footer class="pwFooter">
+    <div class="pwSubtitle">Piratwhist v1.0.1.1</div>
+    <nav class="pwPills" aria-label="Footer navigation">
+      <a class="pwPill" href="/piratwhist.html">Start</a>
+      <a class="pwPill" href="/score.html">Fysisk spil</a>
+      <a class="pwPill" href="/rules.html">Regler</a>
+    </nav>
+  </footer>
+
+  <script src="/pw_telemetry.js"></script>
+  <script src="/feedback.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="/guide_scenes.js"></script>
+  <script src="/guide_overlay.js"></script>
+  <script src="/online.js"></script>
+</body>
+</html>

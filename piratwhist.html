@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Piratwhist v1.0.1.1 · Start</title>
+  <link rel="stylesheet" href="/pw_mini.css" />
+  <link rel="stylesheet" href="/feedback.css" />
+</head>
+<body class="pwPage">
+  <header class="pwHeader">
+    <div class="pwBrand">
+      <div class="pwTitle">Piratwhist</div>
+      <div class="pwVersion">v1.0.1.1</div>
+    </div>
+    <nav class="pwPills" aria-label="Top navigation">
+      <a class="pwPill" href="/rules.html">Regler</a>
+    </nav>
+  </header>
+
+  <main class="pwMain">
+    <h1>Vælg spiltype</h1>
+    <p class="pwSubtitle">Vælg hvad du vil spille. Du kommer til en ny side, hvor du kan oprette eller join et rum til det valgte spil.</p>
+
+    <section class="pwGrid" aria-label="Spiltyper">
+      <article class="pwCard" id="pwCardPhysical">
+        <h2>Fysisk spil (point-tavle)</h2>
+        <p>Til når I sidder sammen og vil føre point i et delt rum.</p>
+        <div class="pwRow">
+          <a id="pwGoPhysical" class="pwBtn pwBtnPrimary" href="/score.html">Fysisk spil</a>
+        </div>
+      </article>
+
+      <article class="pwCard" id="pwCardOnline">
+        <h2>Online multiplayer</h2>
+        <p>Opret eller join et online rum og spil mod andre (og bots).</p>
+        <div class="pwRow">
+          <a id="pwGoOnline" class="pwBtn pwBtnPrimary" href="/online.html">Online spil</a>
+        </div>
+      </article>
+
+      <article class="pwCard" id="pwCardLearn">
+        <h2>Regler & guides</h2>
+        <p>Få overblik over reglerne eller åbne guide-siderne til screenshots og forklaringer.</p>
+        <div class="pwRow">
+          <a class="pwBtn pwBtnSecondary" href="/rules.html">Læs regler</a>
+          <a class="pwBtn pwBtnSecondary" href="/guide.html">Guide</a>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="pwFooter">
+    <div class="pwSubtitle">Piratwhist v1.0.1.1</div>
+    <nav class="pwPills" aria-label="Footer navigation">
+      <a class="pwPill" href="/piratwhist.html">Start</a>
+      <a class="pwPill" href="/rules.html">Regler</a>
+    </nav>
+  </footer>
+  <script src="/pw_telemetry.js"></script>
+  <script src="/feedback.js"></script>
+</body>
+</html>

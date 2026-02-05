@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Piratwhist – Regler v1.0.1.1</title>
+  <link rel="stylesheet" href="piratwhist.css" />
+  <link rel="stylesheet" href="/feedback.css" />
+</head>
+<body class="page-rules">
+  <header class="topbar">
+    <div class="title">
+      Piratwhist – Regler <span class="badge">v1.0.1.1</span>
+    </div>
+    <div class="actions">
+      <button id="rulesBack" class="ghost linkbtn" type="button">← Tilbage</button>
+      <!-- Admin-link: skal KUN være synlig for spillernavn "LaBA" (robust skjul også uden JS). -->
+      <a id="rulesAdmin" class="ghost linkbtn" href="/admin.html" hidden style="display:none">Admin</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="card">
+      <h2>Regler (gælder for både fysisk og online spil)</h2>
+      <p>
+        Piratwhist er et whist-lignende stikspil for <strong>2–8 spillere</strong> med bud.
+        Reglerne er de samme i <strong>fysisk spil</strong> og <strong>online spil</strong> — forskellen er kun,
+        hvordan bud, stik og point registreres.
+      </p>
+
+      <h2>Grundregler</h2>
+      <ul>
+        <li><strong>Spar (♠) er altid trumf</strong>.</li>
+        <li>Man skal <strong>bekende kulør</strong>, hvis man kan.</li>
+        <li>Hvis man ikke kan bekende kulør, må man spille et hvilket som helst kort.</li>
+        <li>Højeste kort vinder stikket i den udspillede kulør, medmindre der spilles trumf.</li>
+      </ul>
+
+      <h2>Runder og antal kort (52-korts begrænsning)</h2>
+      <ul>
+        <li>Der bruges ét standard spil (52 kort).</li>
+        <li>Antal kort pr. spiller i en runde må aldrig overstige <code>floor(52 / antal spillere)</code>.</li>
+        <li>Der er altid mindst 1 kort pr. spiller.</li>
+      </ul>
+
+      <h2>Tur-rækkefølge (FAST)</h2>
+      <ul>
+        <li><strong>Kortomgangen går altid med uret (clockwise)</strong> set oppefra — på både mobil og PC.</li>
+        <li>I første stik i en runde lægger en ny spiller ud (roterer fra runde til runde).</li>
+        <li>Vinderen af et stik lægger ud i næste stik.</li>
+      </ul>
+
+      <div class="rule-figure">
+        <iframe class="rule-illustration" src="online_play.html?guide=1&scene=clockwise&clean=1" loading="lazy" title="Illustration: Rækkefølge med uret (clockwise)"></iframe>
+        <div class="figcap">Illustration: Rækkefølge med uret (clockwise)</div>
+      </div>
+
+      <h2>Budfase</h2>
+      <p>
+        Før en runde spilles, afgiver hver spiller et bud på, hvor mange stik de forventer at vinde i runden.
+        Bud kan være fra <strong>0</strong> til <strong>antal kort på hånden</strong>.
+      </p>
+
+      <div class="rule-figure">
+        <iframe class="rule-illustration" src="online_bidding.html?guide=1&scene=normal_bidding&clean=1" loading="lazy" title="Illustration: Budfase (normal runde)"></iframe>
+        <div class="figcap">Illustration: Budfase (normal runde)</div>
+      </div>
+
+      <h2>Særregel: Runde med 1 kort pr. spiller</h2>
+      <p>
+        Når der kun deles <strong>1 kort pr. spiller</strong>, gælder en særlig informationsregel <em>før bud</em>:
+      </p>
+      <ul>
+        <li>Du kan <strong>ikke se dit eget kort</strong> før bud (dit kort er skjult/bagside).</li>
+        <li>Du kan <strong>se alle modstanderes kort</strong> før bud (forsider vises).</li>
+        <li>Reglen gælder for <strong>alle spillere</strong> (symmetrisk).</li>
+      </ul>
+
+      <div class="rule-figure">
+        <iframe class="rule-illustration" src="online_bidding.html?guide=1&scene=onecard&clean=1" loading="lazy" title="Illustration: 1-korts-runde (du ser ikke dit eget kort før bud)"></iframe>
+        <div class="figcap">Illustration: 1-korts-runde (du ser ikke dit eget kort før bud)</div>
+      </div>
+
+      <h2>Spil af stik</h2>
+      <ul>
+        <li>Spillerne spiller ét kort ad gangen i tur-rækkefølge.</li>
+        <li>Man skal bekende kulør, hvis muligt.</li>
+        <li>Stikket vindes af højeste trumf (hvis trumf er spillet), ellers højeste kort i udspillet kulør.</li>
+      </ul>
+
+      <div class="rule-figure">
+        <iframe class="rule-illustration" src="online_play.html?guide=1&scene=trumpwin&clean=1" loading="lazy" title="Illustration: Trumf (♠) vinder stikket"></iframe>
+        <div class="figcap">Illustration: Trumf (♠) vinder stikket</div>
+      </div>
+
+      <h2>Point</h2>
+      <ul>
+        <li>Hvis du rammer dit bud præcist: <strong>10 point + dit bud</strong>.</li>
+        <li>Hvis du ikke rammer dit bud: <strong>-abs(stik - bud)</strong> point (negativt for hver stik du er fra).</li>
+        <li>Totalscoren er summen af alle runder.</li>
+      </ul>
+
+      <h2>Resultatoversigt</h2>
+      <p>
+        Pointoversigten viser én samlet tabel:
+      </p>
+      <ul>
+        <li><strong>Total</strong> ligger øverst og viser <em>kun point</em>.</li>
+        <li>Dernæst vises runder med <strong>seneste runde øverst</strong>.</li>
+        <li>Format pr. runde pr. spiller: <code>Bud / Stik (Point)</code>.</li>
+      </ul>
+
+      <div class="rule-figure">
+        <iframe class="rule-illustration" src="online_play.html?guide=1&scene=scoretable&clean=1" loading="lazy" title="Illustration: Pointoversigt (Total øverst, seneste runde øverst)"></iframe>
+        <div class="figcap">Illustration: Pointoversigt (Total øverst, seneste runde øverst)</div>
+      </div>
+
+
+      <h2>Fysisk spil – indtastning (KUN fysisk spil)</h2>
+      <p>
+        I fysisk spil bruger du appen som scoretavle. Her indtastes <strong>bud</strong> og <strong>stik</strong>
+        manuelt, og appen beregner point og totaler.
+        <strong>Disse indtastninger er ikke relevante i online spil</strong>.
+      </p>
+
+      <h2>Online spil – automatisk</h2>
+      <p>
+        I online spil håndterer spillet automatisk kort, bud, stik og point. Du skal kun afgive bud og spille kort.
+      </p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    Piratwhist v1.0.1.1
+  </footer>
+
+  <script>
+    (function(){
+      function sameOrigin(url){
+        try { return new URL(url, window.location.href).origin === window.location.origin; } catch(e){ return false; }
+      }
+      function getParam(name){
+        try { return new URLSearchParams(window.location.search).get(name); } catch(e){ return null; }
+      }
+      const fromParam = getParam('from');
+      let storedReturn = null;
+      try { storedReturn = sessionStorage.getItem('pw_rules_return'); } catch(_) { storedReturn = null; }
+      let fallback = 'piratwhist.html';
+      if (storedReturn && sameOrigin(storedReturn)) {
+        fallback = storedReturn;
+      } else if (fromParam) {
+        try { fallback = decodeURIComponent(fromParam); } catch(e){ fallback = fromParam; }
+      } else if (document.referrer && sameOrigin(document.referrer)) {
+        fallback = document.referrer;
+      }
+
+      document.getElementById('rulesBack')?.addEventListener('click', () => {
+        // Preferred: browser back (returns to the exact state, incl. mid-game).
+        if (document.referrer && sameOrigin(document.referrer) && history.length > 1) {
+          history.back();
+          return;
+        }
+        // Fallback: explicit URL.
+        window.location.href = fallback;
+      });
+
+      // Clear stored return once we've used the rules page (prevents stale returns later)
+      try { sessionStorage.removeItem('pw_rules_return'); } catch(_) {}
+
+      // If the rules page was opened in a new tab, the user might "close" the tab.
+      // Provide a safe close attempt via ESC (optional):
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          try { window.close(); } catch(_) {}
+          // If closing is blocked, navigate back instead.
+          window.location.href = fallback;
+        }
+      });
+
+      function getStoredName(){
+        try { return (localStorage.getItem("pw_player_name") || "").trim(); } catch(e){ return ""; }
+      }
+      const adminLink = document.getElementById('rulesAdmin');
+      if (adminLink){
+        const name = getStoredName();
+        const isAdmin = name === 'LaBA';
+        // Dobbelt-sikring: både hidden-attribut og inline display.
+        adminLink.hidden = !isAdmin;
+        adminLink.style.display = isAdmin ? '' : 'none';
+      }
+    })();
+  </script>
+  <script src="/pw_telemetry.js"></script>
+  <script src="/feedback.js"></script>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="da">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Piratwhist v1.0.1.1 · Resultat</title>
+  <link rel="stylesheet" href="/piratwhist.css" />
+  <link rel="stylesheet" href="/online.css" />
+  <link rel="stylesheet" href="/online_pages.css" />
+  <link rel="stylesheet" href="/guide_mode.css" />
+  <link rel="stylesheet" href="/feedback.css" />
+
+<body>
+  <div class="app">
+    <header class="top">
+      <div>
+        <div class="title">Piratwhist</div>
+        <div class="sub">Online · Resultat · v1.0.1.1</div>
+      </div>
+      <div class="pill">Rum: <span id="olRoomLabel">-</span></div>
+      <div class="pill">Du er: <span id="olSeatLabel">-</span></div>
+    </header>
+    <main class="main">
+
+<section class="card tight">
+  <h2>Resultat</h2>
+  <div id="olInfo" class="sub">-</div>
+</section>
+
+<section class="card" id="olScores">
+  <h2>Resultater</h2>
+  <div class="row gap">
+    <div class="pill">Runde: <span id="olResRound">-</span></div>
+    <div class="pill">Kort pr. spiller: <span id="olResCards">-</span></div>
+  </div>
+
+  <div class="tableWrap">
+    <table class="t" id="olScoreTable"></table>
+  </div>
+  <div class="hsep"></div>
+  <div class="tableWrap">
+    <table class="t" id="olHistoryTable"></table>
+  </div>
+  <div class="sub">Point pr. runde: Rammer du dit bud: <b>10 + bud</b>. Ellers: <b>-1 pr. stik</b> du er fra.</div>
+
+  <div class="hsep"></div>
+  <div class="row gap wrap">
+    <button id="olNextRound" class="primary">Næste runde</button>
+    <button id="olLeaveRoom" class="danger">Forlad rum</button>
+  </div>
+</section>
+
+    </main>
+
+    <footer class="footer">
+      <div class="brand">
+        <div class="logo">🏴‍☠️</div>
+        <div>
+          <div class="title">Piratwhist <span class="ver">v1.0.1.1</span></div>
+          <div class="sub">Online spil · spar er trumf · bekend kulør</div>
+        </div>
+      </div>
+      <div class="nav">
+        <a class="linkbtn" href="/score.html">Start</a>
+        <a class="linkbtn" href="/online.html">Online</a>
+        <a class="linkbtn" href="/score.html">Point-tavle</a>
+        <a class="linkbtn ghost" href="/rules.html">Regler</a>
+      </div>
+    </footer>
+
+  </div>
+  <script src="/pw_telemetry.js"></script>
+  <script src="/feedback.js"></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script src="/guide_scenes.js"></script>
+  <script src="/guide_overlay.js"></script>
+  <script src="/online.js"></script>
+</body>
+</html>
